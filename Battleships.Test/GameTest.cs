@@ -48,5 +48,21 @@ namespace Battleships.Test
                 .WithParameterName("guesses");
         }
 
+
+        [Fact]
+        public void Battleships_NoShips_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            string[] ships = Array.Empty<string>();
+            string[] guesses = new[] { "7:0", "3:3" };
+
+            // Act
+            Action act = () => Game.Play(ships, guesses);
+
+            // Assert
+            act.Should().Throw<ArgumentOutOfRangeException>()
+                .WithParameterName("ships");
+        }
+
     }
 }

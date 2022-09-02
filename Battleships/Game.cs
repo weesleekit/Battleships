@@ -38,6 +38,11 @@ namespace Battleships
             {
                 throw new ArgumentNullException(nameof(guesses));
             }
+
+            if (ships.Length == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(ships));
+            }
         }
     }
 }
