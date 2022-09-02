@@ -35,9 +35,21 @@ namespace Battleships.Classes
 
             EndPosition = InputParser.ParseCoordinateString(shipStartEndCoords[1]);
 
+            ValidatePositions();
+        }
+
+        private void ValidatePositions()
+        {
             if (StartPosition.Equals(EndPosition))
             {
                 throw new ArgumentException("Ship cannot start and finish on same position");
+            }
+
+            Position difference = StartPosition - EndPosition;
+
+            if (difference.row != 0 && difference.column != 0)
+            {
+                throw new ArgumentException("Ship cannot lie across rows and columns");
             }
         }
     }

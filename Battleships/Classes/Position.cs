@@ -18,5 +18,11 @@ namespace Battleships.Classes
             return (column == other.column
                 && row == other.row);
         }
+
+        public static Position operator -(Position x, Position y)
+        {
+            return new Position(x.row - y.row,
+                                x.column - y.column);
+        }
     }
 }
