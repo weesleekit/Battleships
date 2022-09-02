@@ -64,5 +64,20 @@ namespace Battleships.Test
                 .WithParameterName("ships");
         }
 
+        [Fact]
+        public void Battleships_InvalidShipInput_ThrowsArgumentException()
+        {
+            // Arrange
+            string[] ships = new[] { "asdjasbekfgjbsg" };
+            string[] guesses = new[] { "7:0", "3:3" };
+
+            // Act
+            Action act = () => Game.Play(ships, guesses);
+            
+            // Assert
+            act.Should().Throw<ArgumentException>();
+        }
+
+
     }
 }
