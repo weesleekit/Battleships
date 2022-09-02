@@ -46,7 +46,7 @@ namespace Battleships.Classes
                 throw new ArgumentException($"Out of bounds end position {newShip.EndPosition}");
             }
 
-            foreach (ShipHullSection shipHullSection in newShip.shipHullSections)
+            foreach (ShipHullSection shipHullSection in newShip.ShipHullSections)
             {
                 foreach (Ship existingShip in allShips)
                 {
@@ -70,14 +70,18 @@ namespace Battleships.Classes
             {
                 Ship ship = afloatShips[i];
 
-                ship.HandleGuess(incomingGuessPosition, out bool isSunk);
-
+                ship.HandleGuess(incomingGuessPosition, out bool isSunk, out bool isAHit);
+                
                 if (isSunk)
                 {
                     Log.Information("Ship has been sunk, {@ship}", ship);
                     afloatShips.Remove(ship);
                     sunkShips.Add(ship);
-                    i--;
+                }
+
+                if (isSunk || isAHit)
+                {
+                    return;
                 }
             }
         }

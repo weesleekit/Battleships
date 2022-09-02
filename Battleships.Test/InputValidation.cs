@@ -65,5 +65,20 @@ namespace Battleships.Test
             // Assert
             act.Should().Throw<ArgumentException>();
         }
+
+        [Fact]
+        public void Battleships_GuessInput_ThrowsArgumentException()
+        {
+            // Arrange
+            var ships = new[] { "3:2,3:5" };
+            string[] guesses = new[] { "asdjasbekfgjbsg" };
+
+            // Act
+            Action act = () => Game.Play(ships, guesses);
+
+            // Assert
+            act.Should().Throw<ArgumentException>();
+        }
+        //add guesses
     }
 }

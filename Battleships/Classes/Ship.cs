@@ -19,7 +19,7 @@ namespace Battleships.Classes
 
         public Position EndPosition { get; }
 
-        public List<ShipHullSection> shipHullSections { get; } = new List<ShipHullSection>();
+        public List<ShipHullSection> ShipHullSections { get; } = new List<ShipHullSection>();
 
         // Constructor
 
@@ -63,7 +63,7 @@ namespace Battleships.Classes
 
         internal bool Occupies(Position position)
         {
-            foreach (ShipHullSection shipHullSection in shipHullSections)
+            foreach (ShipHullSection shipHullSection in ShipHullSections)
             {
                 if (shipHullSection.Position.Equals(position))
                 {
@@ -74,15 +74,18 @@ namespace Battleships.Classes
             return false;
         }
 
-        internal void HandleGuess(Position incomingGuessPosition, out bool isSunk)
+        internal void HandleGuess(Position incomingGuessPosition, out bool isSunk, out bool isAHit)
         {
             isSunk = false;
+            isAHit = false;
 
-            foreach (ShipHullSection shipHullSection in shipHullSections)
+            foreach (ShipHullSection shipHullSection in ShipHullSections)
             {
                 if (shipHullSection.IncomingGuessHits(incomingGuessPosition))
                 {
-                    var healthyShipSectionsRemaining = shipHullSections.Where(x => !x.IsHit);
+                    isAHit = true;
+
+                    var healthyShipSectionsRemaining = ShipHullSections.Where(x => !x.IsHit);
                     if (!healthyShipSectionsRemaining.Any())
                     { 
                         isSunk = true;
@@ -102,13 +105,13 @@ namespace Battleships.Classes
 
             Position currentPosition = StartPosition;
 
-            shipHullSections.Add(new ShipHullSection(currentPosition));
+            ShipHullSections.Add(new ShipHullSection(currentPosition));
 
             do
             {
                 currentPosition += displacementStep;
 
-                shipHullSections.Add(new ShipHullSection(currentPosition));
+                ShipHullSections.Add(new ShipHullSection(currentPosition));
             }
             while (!currentPosition.Equals(EndPosition));
         }
