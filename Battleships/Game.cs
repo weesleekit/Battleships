@@ -1,4 +1,5 @@
 ﻿using Battleships.Classes;
+using Serilog;
 using System;
 
 namespace Battleships
@@ -17,36 +18,49 @@ namespace Battleships
         // returns: the number of ships sunk by the set of guesses
         public static int Play(string[] ships, string[] guesses)
         {
-            ValidateInputData(ships, guesses);
-
-            GameBoard gameBoard = new GameBoard();
-
-            foreach (var shipInput in ships)
+            using (var log = new LoggerConfiguration().CreateLogger())
             {
-                Ship ship = new Ship(shipInput);
+                Log.Information("Starting: Game");
 
-                gameBoard.AddShip(ship);
+                ValidateInputData(ships, guesses);
+
+                GameBoard gameBoard = new GameBoard();
+
+                foreach (var shipInput in ships)
+                {
+                    Ship ship = new Ship(shipInput);
+
+                    gameBoard.AddShip(ship);
+                }
+
+                Log.Information("Finished: Game");
+                return 0;
             }
-
-            return 0;
         }
 
         private static void ValidateInputData(string[] ships, string[] guesses)
         {
+            Log.Information("Starting: Validating input data");
+
             if (ships == null)
             {
+                Log.Fatal("Null ships input data");
                 throw new ArgumentNullException(nameof(ships));
             }
 
             if (guesses == null)
             {
+                Log.Fatal("Null guesses input data");
                 throw new ArgumentNullException(nameof(guesses));
             }
 
             if (ships.Length == 0)
             {
+                Log.Fatal("No ships");
                 throw new ArgumentOutOfRangeException(nameof(ships));
             }
+
+            Log.Information("Finished: Validating input data");
         }
     }
 }

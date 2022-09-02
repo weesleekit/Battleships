@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 
 namespace Battleships.Classes
@@ -28,16 +29,22 @@ namespace Battleships.Classes
         /// <exception cref="ArgumentException"></exception>
         public Ship(string input)
         {
+            Log.Information("Starting: To create Ship {input}", input);
+
             if (string.IsNullOrWhiteSpace(input))
             {
-                throw new ArgumentException("Input is null, empty or whitespace");
+                string message = "Input is null, empty or whitespace";
+                Log.Fatal(message);
+                throw new ArgumentException(message);
             }
 
             string[] shipStartEndCoords = input.Split(',');
 
             if (shipStartEndCoords.Length != 2)
             {
-                throw new ArgumentException("Expected separator character , to produce two elements");
+                string message = "Expected separator character , to produce two elements";
+                Log.Fatal(message);
+                throw new ArgumentException(message);
             }
 
             StartPosition = InputParser.ParseCoordinateString(shipStartEndCoords[0]);
@@ -47,6 +54,8 @@ namespace Battleships.Classes
             ValidatePositions();
 
             GenerateHullSections();
+
+            Log.Information("Finished: Creating Ship");
         }
 
         // Internal Methods
@@ -89,25 +98,31 @@ namespace Battleships.Classes
         {
             if (StartPosition.Equals(EndPosition))
             {
-                throw new ArgumentException("Ship cannot start and finish on same position");
+                string message = "Ship cannot start and finish on same position";
+                Log.Fatal(message);
+                throw new ArgumentException(message);
             }
 
             Position displacement = StartPosition - EndPosition;
 
             if (displacement.row != 0 && displacement.column != 0)
             {
-                throw new ArgumentException("Ship cannot lie across rows and columns");
+                string message = "Ship cannot lie across rows and columns";
+                Log.Fatal(message);
+                throw new ArgumentException(message);
             }
 
             int shipLength = Math.Abs(displacement.row > 0 ? displacement.row : displacement.column) + 1;
 
             if (shipLength < minimumLength)
             {
+                Log.Fatal("Ship is too short, length of {shipLength} needs to be at least {minimumLength}", shipLength, minimumLength);
                 throw new ArgumentException($"Ship is too short, length of {shipLength} needs to be at least {minimumLength}");
             }
 
             if (shipLength > maximumLength)
             {
+                Log.Fatal("Ship is too long, length of {shipLength} needs to be at most {maximumLength}", shipLength, maximumLength);
                 throw new ArgumentException($"Ship is too long, length of {shipLength} needs to be at most {maximumLength}");
             }
         }
