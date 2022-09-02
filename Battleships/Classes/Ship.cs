@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Battleships.Classes
 {
@@ -15,6 +16,8 @@ namespace Battleships.Classes
         public Position StartPosition { get; }
 
         public Position EndPosition { get; }
+
+        public List<ShipHullSection> HullSections { get; } = new List<ShipHullSection>();
 
         // Constructor
 
@@ -42,6 +45,44 @@ namespace Battleships.Classes
             EndPosition = InputParser.ParseCoordinateString(shipStartEndCoords[1]);
 
             ValidatePositions();
+
+            GenerateHullSections();
+        }
+
+        // Internal Methods
+
+        internal bool Occupies(Position position)
+        {
+            foreach (ShipHullSection shipHullSection in HullSections)
+            {
+                if (shipHullSection.Position.Equals(position))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // Private Methods
+
+        private void GenerateHullSections()
+        {
+            Position displacement = EndPosition - StartPosition;
+
+            Position displacementStep = displacement.ReduceToLength_1_ForEitherDimension();
+
+            Position currentPosition = StartPosition;
+
+            HullSections.Add(new ShipHullSection(currentPosition));
+
+            do
+            {
+                currentPosition += displacementStep;
+
+                HullSections.Add(new ShipHullSection(currentPosition));
+            }
+            while (!currentPosition.Equals(EndPosition));
         }
 
         private void ValidatePositions()
@@ -51,14 +92,14 @@ namespace Battleships.Classes
                 throw new ArgumentException("Ship cannot start and finish on same position");
             }
 
-            Position difference = StartPosition - EndPosition;
+            Position displacement = StartPosition - EndPosition;
 
-            if (difference.row != 0 && difference.column != 0)
+            if (displacement.row != 0 && displacement.column != 0)
             {
                 throw new ArgumentException("Ship cannot lie across rows and columns");
             }
 
-            int shipLength = Math.Abs(difference.row > 0 ? difference.row : difference.column) + 1;
+            int shipLength = Math.Abs(displacement.row > 0 ? displacement.row : displacement.column) + 1;
 
             if (shipLength < minimumLength)
             {

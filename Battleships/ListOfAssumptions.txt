@@ -1,3 +1,6 @@
-﻿It is not permitted for there to be no ships
+﻿Feedback is to be provided via errors
+Feedback that references row and column numbers counts from zero (given that that's how the API string takes it)
+It is not permitted for there to be no ships
 The language type has to stay on C# 7.3
 Want the tests to stay high level rather than in the implementation detail
+One ship can occupy a grid cell

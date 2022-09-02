@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace Battleships.Classes
 {
@@ -19,10 +20,36 @@ namespace Battleships.Classes
                 && row == other.row);
         }
 
+        internal Position ReduceToLength_1_ForEitherDimension()
+        {
+            return new Position(Normalise(row), Normalise(column));
+        }
+
+        private int Normalise(int value)
+        {
+            if (value == 0)
+            {
+                return 0;
+            }
+
+            return value / Math.Abs(value);
+        }
+
         public static Position operator -(Position x, Position y)
         {
             return new Position(x.row - y.row,
                                 x.column - y.column);
+        }
+
+        public static Position operator +(Position x, Position y)
+        {
+            return new Position(x.row + y.row,
+                                x.column + y.column);
+        }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
         }
     }
 }
