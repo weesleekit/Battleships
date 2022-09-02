@@ -4,6 +4,12 @@ namespace Battleships.Classes
 {
     internal class Ship
     {
+        // Constants
+
+        private const int minimumLength = 2;
+
+        private const int maximumLength = 4;
+
         // Properties
 
         public Position StartPosition { get; }
@@ -50,6 +56,18 @@ namespace Battleships.Classes
             if (difference.row != 0 && difference.column != 0)
             {
                 throw new ArgumentException("Ship cannot lie across rows and columns");
+            }
+
+            int shipLength = Math.Abs(difference.row > 0 ? difference.row : difference.column) + 1;
+
+            if (shipLength < minimumLength)
+            {
+                throw new ArgumentException($"Ship is too short, length of {shipLength} needs to be at least {minimumLength}");
+            }
+
+            if (shipLength > maximumLength)
+            {
+                throw new ArgumentException($"Ship is too long, length of {shipLength} needs to be at most {maximumLength}");
             }
         }
     }
