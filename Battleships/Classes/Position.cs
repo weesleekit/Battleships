@@ -5,8 +5,12 @@ namespace Battleships.Classes
 {
     internal struct Position : IEquatable<Position>
     {
+        // Properties
+
         public int row;
         public int column;
+
+        // Constructor
 
         internal Position(int row, int column)
         {
@@ -14,25 +18,12 @@ namespace Battleships.Classes
             this.column = column;
         }
 
+        // Public Methods
+
         public bool Equals(Position other)
         {
             return (column == other.column
                 && row == other.row);
-        }
-
-        internal Position ReduceToLength_1_ForEitherDimension()
-        {
-            return new Position(Normalise(row), Normalise(column));
-        }
-
-        private int Normalise(int value)
-        {
-            if (value == 0)
-            {
-                return 0;
-            }
-
-            return value / Math.Abs(value);
         }
 
         public static Position operator -(Position x, Position y)
@@ -46,6 +37,27 @@ namespace Battleships.Classes
             return new Position(x.row + y.row,
                                 x.column + y.column);
         }
+
+        // Internal Methods
+
+        internal Position ReduceToLength_1_ForEitherDimension()
+        {
+            return new Position(Normalise(row), Normalise(column));
+        }
+
+        // Private Methods
+
+        private int Normalise(int value)
+        {
+            if (value == 0)
+            {
+                return 0;
+            }
+
+            return value / Math.Abs(value);
+        }
+
+        // Overriden Methods
 
         public override string ToString()
         {
