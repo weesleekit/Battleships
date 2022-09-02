@@ -1,9 +1,5 @@
 ﻿using Battleships.Classes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Battleships
 {
@@ -23,11 +19,13 @@ namespace Battleships
         {
             ValidateInputData(ships, guesses);
 
-            List<Ship> shipsList = new List<Ship>();
+            GameBoard gameBoard = new GameBoard();
 
             foreach (var shipInput in ships)
             {
-                shipsList.Add(new Ship(shipInput));
+                Ship ship = new Ship(shipInput);
+
+                gameBoard.AddShip(ship);
             }
 
             return 0;

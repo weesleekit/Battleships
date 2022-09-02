@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 
 namespace Battleships.Classes
 {
@@ -11,7 +10,7 @@ namespace Battleships.Classes
         /// <param name="input"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static Vector2 ParseCoordinateString(string input)
+        internal static Position ParseCoordinateString(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
@@ -38,7 +37,7 @@ namespace Battleships.Classes
                 throw new ArgumentException($"Invalid row String {columnString}");
             }
 
-            return new Vector2(row, column);
+            return new Position(row, column);
         }
 
     }

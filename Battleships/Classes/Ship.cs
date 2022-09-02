@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Battleships.Classes
 {
     internal class Ship
     {
+        // Properties
+
+        public Position StartPosition { get; }
+
+        public Position EndPosition { get; }
 
         // Constructor
 
@@ -31,9 +31,9 @@ namespace Battleships.Classes
                 throw new ArgumentException("Expected separator character , to produce two elements");
             }
 
-            Vector2 startPosition = InputParser.ParseCoordinateString(shipStartEndCoords[0]);
+            StartPosition = InputParser.ParseCoordinateString(shipStartEndCoords[0]);
 
-            Vector2 endPosition = InputParser.ParseCoordinateString(shipStartEndCoords[1]);
+            EndPosition = InputParser.ParseCoordinateString(shipStartEndCoords[1]);
         }
     }
 }
