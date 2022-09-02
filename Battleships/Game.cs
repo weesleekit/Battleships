@@ -11,6 +11,8 @@ namespace Battleships
     //   Once all cells representing a ship are hit - that ship is sunk.
     public class Game
     {
+        //Public Methods
+
         // ships: each string represents a ship in the form first co-ordinate, last co-ordinate
         //   e.g. "3:2,3:5" is a 4 cell ship horizontally across the 4th row from the 3rd to the 6th column
         // guesses: each string represents the co-ordinate of a guess
@@ -20,23 +22,39 @@ namespace Battleships
         {
             using (var log = new LoggerConfiguration().CreateLogger())
             {
-                Log.Information("Starting: Game");
-
-                ValidateInputData(ships, guesses);
-
-                GameBoard gameBoard = new GameBoard();
-
-                foreach (var shipInput in ships)
-                {
-                    Ship ship = new Ship(shipInput);
-
-                    gameBoard.AddShip(ship);
-                }
-
-                Log.Information("Finished: Game");
-                return 0;
+                return Play(ships, guesses, log);
             }
         }
+
+        public static int Play(string[] ships, string[] guesses, ILogger logger)
+        {
+            Log.Logger = logger;
+
+            Log.Information("Starting: Game");
+
+            ValidateInputData(ships, guesses);
+
+            GameBoard gameBoard = new GameBoard();
+
+            foreach (var shipInput in ships)
+            {
+                Ship ship = new Ship(shipInput);
+
+                gameBoard.AddShip(ship);
+            }
+
+            foreach (var guess in guesses)
+            {
+                Position incomingGuessPosition = InputParser.ParseCoordinateString(guess);
+
+                gameBoard.HandleGuess(incomingGuessPosition);
+            }
+
+            Log.Information("Finished: Game");
+            return gameBoard.SunkShipCount;
+        }
+
+        // Private Methods
 
         private static void ValidateInputData(string[] ships, string[] guesses)
         {

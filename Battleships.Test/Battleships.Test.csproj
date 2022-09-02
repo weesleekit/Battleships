@@ -112,6 +112,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GuessesRules.cs" />
     <Compile Include="GameBoardRules.cs" />
     <Compile Include="GameTest.cs" />
     <Compile Include="InputValidation.cs" />

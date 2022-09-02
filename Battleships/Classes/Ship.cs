@@ -1,6 +1,7 @@
 ﻿using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Battleships.Classes
 {
@@ -18,7 +19,7 @@ namespace Battleships.Classes
 
         public Position EndPosition { get; }
 
-        public List<ShipHullSection> HullSections { get; } = new List<ShipHullSection>();
+        public List<ShipHullSection> shipHullSections { get; } = new List<ShipHullSection>();
 
         // Constructor
 
@@ -62,7 +63,7 @@ namespace Battleships.Classes
 
         internal bool Occupies(Position position)
         {
-            foreach (ShipHullSection shipHullSection in HullSections)
+            foreach (ShipHullSection shipHullSection in shipHullSections)
             {
                 if (shipHullSection.Position.Equals(position))
                 {
@@ -71,6 +72,24 @@ namespace Battleships.Classes
             }
 
             return false;
+        }
+
+        internal void HandleGuess(Position incomingGuessPosition, out bool isSunk)
+        {
+            isSunk = false;
+
+            foreach (ShipHullSection shipHullSection in shipHullSections)
+            {
+                if (shipHullSection.IncomingGuessHits(incomingGuessPosition))
+                {
+                    var healthyShipSectionsRemaining = shipHullSections.Where(x => !x.IsHit);
+                    if (!healthyShipSectionsRemaining.Any())
+                    { 
+                        isSunk = true;
+                    }
+                    return;
+                }
+            }
         }
 
         // Private Methods
@@ -83,13 +102,13 @@ namespace Battleships.Classes
 
             Position currentPosition = StartPosition;
 
-            HullSections.Add(new ShipHullSection(currentPosition));
+            shipHullSections.Add(new ShipHullSection(currentPosition));
 
             do
             {
                 currentPosition += displacementStep;
 
-                HullSections.Add(new ShipHullSection(currentPosition));
+                shipHullSections.Add(new ShipHullSection(currentPosition));
             }
             while (!currentPosition.Equals(EndPosition));
         }
@@ -112,7 +131,7 @@ namespace Battleships.Classes
                 throw new ArgumentException(message);
             }
 
-            int shipLength = Math.Abs(displacement.row > 0 ? displacement.row : displacement.column) + 1;
+            int shipLength = Math.Abs(displacement.row != 0 ? displacement.row : displacement.column) + 1;
 
             if (shipLength < minimumLength)
             {

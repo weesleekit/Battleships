@@ -11,9 +11,15 @@ namespace Battleships.Classes
         private const int rows = 10;
         private const int columns = 10;
 
+        // Properties
+
+        public int SunkShipCount { get { return sunkShips.Count; } }
+
         // Fields
 
-        private readonly List<Ship> ships = new List<Ship>();
+        private readonly List<Ship> allShips = new List<Ship>();
+        private readonly List<Ship> afloatShips = new List<Ship>();
+        private readonly List<Ship> sunkShips = new List<Ship>();
 
         // Constructor
 
@@ -40,9 +46,9 @@ namespace Battleships.Classes
                 throw new ArgumentException($"Out of bounds end position {newShip.EndPosition}");
             }
 
-            foreach (ShipHullSection shipHullSection in newShip.HullSections)
+            foreach (ShipHullSection shipHullSection in newShip.shipHullSections)
             {
-                foreach (Ship existingShip in ships)
+                foreach (Ship existingShip in allShips)
                 {
                     if (existingShip.Occupies(shipHullSection.Position))
                     {
@@ -52,9 +58,28 @@ namespace Battleships.Classes
                 }
             }
 
-            ships.Add(newShip);
+            allShips.Add(newShip);
+            afloatShips.Add(newShip);
 
             Log.Information("Finished: Adding ship");
+        }
+
+        internal void HandleGuess(Position incomingGuessPosition)
+        {
+            for (int i = 0; i < afloatShips.Count; i++)
+            {
+                Ship ship = afloatShips[i];
+
+                ship.HandleGuess(incomingGuessPosition, out bool isSunk);
+
+                if (isSunk)
+                {
+                    Log.Information("Ship has been sunk, {@ship}", ship);
+                    afloatShips.Remove(ship);
+                    sunkShips.Add(ship);
+                    i--;
+                }
+            }
         }
 
         // Private Methods
