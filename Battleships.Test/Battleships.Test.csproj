@@ -113,7 +113,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameTest.cs" />
+    <Compile Include="InputValidation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShipBusinessRules.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
