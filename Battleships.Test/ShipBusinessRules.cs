@@ -29,5 +29,22 @@ namespace Battleships.Test
             // Assert
             act.Should().Throw<ArgumentException>();
         }
+
+
+        [Fact]
+        public void Battleships_ShipStartsAndEndsSameSpace_ThrowsArgumentException()
+        {
+            // Arrange
+            string[] ships = new[] { "3:5,3:5" };
+            string[] guesses = new[] { "7:0", "3:3" };
+
+            // Act
+            Action act = () => Game.Play(ships, guesses);
+
+            // Assert
+            act.Should().Throw<ArgumentException>();
+        }
+
+
     }
 }

@@ -34,6 +34,11 @@ namespace Battleships.Classes
             StartPosition = InputParser.ParseCoordinateString(shipStartEndCoords[0]);
 
             EndPosition = InputParser.ParseCoordinateString(shipStartEndCoords[1]);
+
+            if (StartPosition.Equals(EndPosition))
+            {
+                throw new ArgumentException("Ship cannot start and finish on same position");
+            }
         }
     }
 }
