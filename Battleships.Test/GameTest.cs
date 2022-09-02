@@ -17,5 +17,36 @@ namespace Battleships.Test
             var guesses = new[] { "7:0", "3:3" };
             Game.Play(ships, guesses).Should().Be(0);
         }
+
+        [Fact]
+        public void Battleships_NullShipsInput_ThrowsArgumentNullException()
+        {
+            // Arrange
+            string[] ships = null;
+            string[] guesses = new[] { "7:0", "3:3" };
+
+            // Act
+            Action act = () => Game.Play(ships, guesses);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>()
+                .WithParameterName("ships");
+        }
+
+        [Fact]
+        public void Battleships_NullGuessesInput_ThrowsArgumentNullException()
+        {
+            // Arrange
+            var ships = new[] { "3:2,3:5" };
+            string[] guesses = null;
+
+            // Act
+            Action act = () => Game.Play(ships, guesses);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>()
+                .WithParameterName("guesses");
+        }
+
     }
 }

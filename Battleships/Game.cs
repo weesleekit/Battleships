@@ -20,7 +20,24 @@ namespace Battleships
         // returns: the number of ships sunk by the set of guesses
         public static int Play(string[] ships, string[] guesses)
         {
+            ValidateInputData(ships, guesses);
+
+
+
             return 0;
+        }
+
+        private static void ValidateInputData(string[] ships, string[] guesses)
+        {
+            if (ships == null)
+            {
+                throw new ArgumentNullException(nameof(ships));
+            }
+
+            if (guesses == null)
+            {
+                throw new ArgumentNullException(nameof(guesses));
+            }
         }
     }
 }
