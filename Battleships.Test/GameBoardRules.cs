@@ -44,5 +44,23 @@ namespace Battleships.Test
             act.Should().Throw<ArgumentException>();
         }
 
+        [Theory]
+        // Testing -1
+        [InlineData(0, new string[] { "-1:2" })]
+        [InlineData(0, new string[] { "2:-1" })]
+        // Testing 10
+        [InlineData(0, new string[] { "10:2" })]
+        [InlineData(0, new string[] { "2:10" })]
+        public void Battleships_OutOfBoundsGuessInput_ThrowsArgumentException(int value, string[] guesses)
+        {
+            // Arrange
+            var ships = new[] { "3:2,3:5" };
+
+            // Act
+            Action act = () => Game.Play(ships, guesses);
+
+            // Assert
+            act.Should().Throw<ArgumentException>();
+        }
     }
 }

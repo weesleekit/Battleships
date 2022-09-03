@@ -66,6 +66,12 @@ namespace Battleships.Classes
 
         internal void HandleGuess(Position incomingGuessPosition)
         {
+            if (!IsWithinBoardBounds(incomingGuessPosition))
+            {
+                Log.Fatal("Out of bounds guess position {Position}", incomingGuessPosition);
+                throw new ArgumentException($"Out of bounds guess position {incomingGuessPosition}");
+            }
+
             for (int i = 0; i < afloatShips.Count; i++)
             {
                 Ship ship = afloatShips[i];
